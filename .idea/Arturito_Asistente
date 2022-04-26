@@ -1,0 +1,42 @@
+import speech_recognition as sr
+import pyttsx3, pywhatkit
+
+
+
+name = "Arturito"
+listener = sr.Recognaizer()
+engine = pyttsx3.init()
+
+voices = engine.getProperty('voices')
+engine.setProperty('voice', voices[0].id)
+
+
+def talk(text):
+    engine.say(text)
+    engine.runAndWait()
+
+
+def listen():
+    try:
+        with sr.Microphone() as source:
+            print("Escuchando...")
+            pc = listener.listen(source)
+            rec = listener.recognize_google(pc)
+            rec = rec.lower()
+            if name in rec:
+                rec = rec.recplace(name, '')
+    except:
+        pass
+    return rec
+
+
+def run_Arturito():
+    rec = listen()
+    if 'reproduce' in rec:
+        video = rec.replace('reproduce', '')
+        print("Reproducioendo" + video)
+        talk("Reproduciendo" + video)
+        pywhatkit.playonyt(video)
+
+if __name__ == '__main__':
+    run_Arturito()
