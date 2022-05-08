@@ -1,4 +1,3 @@
 # Arturito
- Sprin 1 presentacion asistente personal 
- Sprin 2 funciones y correcciones para el asistente
-Personal 
+This will be a personal assistant that will help you 
+in the event that you suffer from some type of depression.
