@@ -1,15 +1,13 @@
-import keyboard, datetime, pyttsx3, pywhatkit, wikipedia, os
+import re, keyboard, datetime, pyttsx3, pywhatkit, wikipedia, os
 import speech_recognition as sr
 import subprocess as sub
 from pygame import mixer
+from pywhatkit.remotekit import start_server
+from flask import Flask, request
 
-name = "Arturito"
+bot = "Arturito"
 listener = sr.Recognizer()
-engine = pyttsx3.init()
 
-voices = engine.getProperty('voices')
-engine.setProperty('voice', voices[0].id)
-engine.setProperty('rate', 145)
 
 sites = {
     'google':'google.com',
@@ -21,12 +19,23 @@ files = {
 }
 
 
+def indentify_name(text):
+    name = None
+    patterns = ["me llamo ([A-Za-z]+)", "mi nombre es ([A-Za-z]+)","^([A-Za-z]+)$"]
+    for pattern in patterns:
+       try:
+           name = re.findall(pattern, text)[0]
+       except IndexError:
+           talk("Porfavor dime tu nombre uwu")
+    return name
+
+
 def talk(text):
     engine.say(text)
     engine.runAndWait()
 
 
-def listen():
+def listener():
     try:
         with sr.Microphone() as source:
             print("Escuchando...")
@@ -50,8 +59,18 @@ def write(f):
 
 
 def run_Arturito():
+    rec = listener(text)
+    name = indentify_name(rec)
+    engine.say("Hola como te llamas")
+    engine.runAndWait()
+
+    if name:
+        engine.say("Encantada de concerte, {}".format(name))
+    else:
+        engine.say("No te he entendido, puedes repetirlo?")
+    engine.runAndWait()
+
     while True:
-        rec = listen()
         if 'reproduce' in rec:
             video = rec.replace('reproduce', '')
             print("Reproducioendo" + video)
