@@ -291,7 +291,7 @@ def say_my_name():
     talk("Hola, ¿como te llamas?")
     name = listen()
     name = name.strip()
-    talk("Bienvenido {name}")
+    talk("Bienvenido {}".format(name))
     
     try:
         with open("name.txt", 'w') as f:
